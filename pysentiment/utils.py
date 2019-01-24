@@ -35,10 +35,11 @@ class Tokenizer(BaseTokenizer):
         self._stemmer = nltk.PorterStemmer()
         self._stopwords = self.get_stopwords()
         
-    def tokenize(self, text):
+    def tokenize(self, text, stem=False):
         tokens = []
         for token in nltk.tokenize.word_tokenize(text.lower()):
-            token = self._stemmer.stem(token)
+            if stem:
+                token = self._stemmer.stem(token)
             if not token in self._stopwords:
                 tokens.append(token)
         return tokens
