@@ -8,7 +8,7 @@ import numpy as np
 from pysentiment.utils import Tokenizer
 
 
-STATIC_PATH = os.path.dirname(__file__)+'/static'
+STATIC_PATH = os.path.dirname(__file__) + '/static'
 
 
 class BaseDict(metaclass=abc.ABCMeta):
@@ -106,7 +106,7 @@ class BaseDict(metaclass=abc.ABCMeta):
         s_pol = (s_pos-s_neg) * 1.0 / ((s_pos+s_neg)+self.EPSILON)
         
         return {
-                self.TAG_POS: s_pos,
-                self.TAG_NEG: s_neg,
-                self.TAG_POL: s_pol,
+            self.TAG_POS: s_pos,
+            self.TAG_NEG: s_neg,
+            self.TAG_POL: s_pol,
         }
