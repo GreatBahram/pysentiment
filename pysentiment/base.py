@@ -11,7 +11,7 @@ from pysentiment.utils import Tokenizer
 STATIC_PATH = os.path.dirname(__file__)+'/static'
 
 
-class BaseDict(object):
+class BaseDict(metaclass=abc.ABCMeta):
     """
     A base class for sentiment analysis. 
     For now, only 'positive' and 'negative' analysis is supported.
@@ -19,7 +19,7 @@ class BaseDict(object):
     Subclasses should implement ``init_dict``, 
     in which ``_posset`` and ``_negset`` are initialized.
     
-    ``Polarity`` and ``Subjectivity`` are calculated in the same way of Lydia system.
+    ``Polarity`` is calculated in the same way of Lydia system.
     See also http://www.cs.sunysb.edu/~skiena/lydia/
     
     The formula for ``Polarity`` is,
@@ -28,21 +28,12 @@ class BaseDict(object):
     
         Polarity= \\frac{N_{pos}-N_{neg}}{N_{pos}+N_{neg}}
     
-    The formula for ``Subjectivity`` is,
-    
-    .. math::
-    
-        Subjectivity= \\frac{N_{pos}+N_{neg}}{N}
-    
     :type tokenizer: obj    
     :param tokenizer: An object which provides interface of ``tokenize``. 
         If it is ``None``, a default tokenizer, which is defined in ``utils``, will be assigned.
     """
     
-    __metaclass__ = abc.ABCMeta
-
     TAG_POL = 'Polarity'
-    TAG_SUB = 'Subjectivity'
     TAG_POS = 'Positive'
     TAG_NEG = 'Negative'
     
@@ -113,9 +104,9 @@ class BaseDict(object):
         s_neg = -np.sum(score_li[score_li < 0])
         
         s_pol = (s_pos-s_neg) * 1.0 / ((s_pos+s_neg)+self.EPSILON)
-        s_sub = (s_pos+s_neg) * 1.0 / (len(score_li)+self.EPSILON)
         
-        return {self.TAG_POS: s_pos,
+        return {
+                self.TAG_POS: s_pos,
                 self.TAG_NEG: s_neg,
                 self.TAG_POL: s_pol,
-                self.TAG_SUB: s_sub}
+        }
